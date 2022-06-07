@@ -41,7 +41,7 @@ if not os.path.isdir(HOME_DIR):
 
 if os.path.exists(LOG_FILE):
     log_file_size = os.path.getsize(LOG_FILE)
-    MAX_FILE_SIZE = 1024 * 1024 
+    MAX_FILE_SIZE = 1024 * 1024
     if log_file_size > MAX_FILE_SIZE:
         # Delete the log file as it's grown too large
         os.remove(LOG_FILE)
@@ -122,7 +122,7 @@ def versioning_info(include_sharppy=False):
     txt += "Numpy version: " + str(np.__version__) + '\n'
     txt += "Python version: " + str(platform.python_version()) + '\n'
     txt += "PySide/Qt version: " + str(qtpy.QtCore.__version__)
-    return txt 
+    return txt
 
 class crasher(object):
     def __init__(self, **kwargs):
@@ -192,7 +192,7 @@ class Calendar(QCalendarWidget):
             color = QColor('#808080')
             color.setAlphaF(0.5)
             painter.fillRect(rect, color)
- 
+
     def setLatestAvailable(self, dt_avail):
         qdate_avail = QDate(dt_avail.year, dt_avail.month, dt_avail.day)
         #self.setMaximumDate(qdate_avail)
@@ -476,7 +476,7 @@ class Picker(QWidget):
             url = self.data_sources[self.model].getURLList(
                 outlet="Local")[0].replace("file://", "")
 
-            def getTimes(): 
+            def getTimes():
                 return self.data_sources[self.model].getAvailableTimes(url)
         else:
             def getTimes():
@@ -1034,7 +1034,7 @@ class Main(QMainWindow):
         txt += "\n\nContribute: https://github.com/sharppy/SHARPpy/"
         msgBox.setText(txt)
         msgBox.exec_()
-        
+
         if msgBox.clickedButton() == documentationButton:
             QDesktopServices.openUrl(QUrl('http://sharppy.github.io/SHARPpy/'))
         elif msgBox.clickedButton() == githubButton:
@@ -1121,7 +1121,7 @@ def search_and_plotDB(model, station, datetime, close=True, output='./'):
         return main_win
 
     string = OKGREEN + "Creating image for station %s using data source %s at time %s ..." + ENDC
-    print( string % (station, model, datetime.strftime('%Y%m%d/%H%M')))  
+    print( string % (station, model, datetime.strftime('%Y%m%d/%H%M')))
     main_win.picker.skew.spc_widget.pixmapToFile(output + datetime.strftime('%Y%m%d.%H%M_' + model + '.png'))
     if close:
         main_win.picker.skew.close()
@@ -1137,14 +1137,14 @@ def test(fn):
     win.close()
 
 def parseArgs():
-    desc = """This binary launches the SHARPpy Picker and GUI from the command line.  When 
-           run from the command line without arguments, this binary simply launches the Picker 
-           and loads in the various datasets within the user's ~/.sharppy directory.  When the 
+    desc = """This binary launches the SHARPpy Picker and GUI from the command line.  When
+           run from the command line without arguments, this binary simply launches the Picker
+           and loads in the various datasets within the user's ~/.sharppy directory.  When the
            --debug flag is set, the GUI is run in debug mode.
 
-           When a set of files are passed as a command line argument, the program will 
+           When a set of files are passed as a command line argument, the program will
            generate images of the SHARPpy GUI for each sounding.  Soundings can be overlaid
-           on top of one another if the collect flag is set.  In addition, data from the 
+           on top of one another if the collect flag is set.  In addition, data from the
            datasources can be plotted using the datasource, station, and datetime arguments."""
     data_sources = [key for key in data_source.loadDataSources().keys()]
     ep = "Available Datasources: " + ', '.join(data_sources)
@@ -1162,21 +1162,21 @@ def parseArgs():
     #                help="do not close the GUI after viewing the image")
     group = ap.add_argument_group("datasource access arguments")
 
-    group.add_argument('--datasource', dest='ds', type=str, 
+    group.add_argument('--datasource', dest='ds', type=str,
                     help="the name of the datasource to search")
     group.add_argument('--station', dest='stn', type=str,
                     help="the name of the station to plot (ICAO, IATA)")
-    group.add_argument('--datetime', dest='dt', type=str, 
+    group.add_argument('--datetime', dest='dt', type=str,
                     help="the date/time of the data to plot (YYYYMMDD/HH)")
     ap.add_argument('--output', dest='output', type=str,
                     help="the output directory to store the images", default='./')
-    args = ap.parse_args() 
+    args = ap.parse_args()
 
     # Print out versioning information and quit
     if args.version is True:
         ap.exit(0, versioning_info(True) + '\n')
-    
-    # Catch invalid data source 
+
+    # Catch invalid data source
     if args.ds is not None and args.ds not in data_sources:
         txt = FAIL + "Invalid data source passed to the program.  Exiting." + ENDC
         ap.error(txt)
@@ -1193,7 +1193,7 @@ def parseArgs():
 
 def main():
     args = parseArgs()
- 
+
     # Create an application
     #app = QApplication([])
     #app.setAttribute(Qt.AA_EnableHighDpiScaling)
@@ -1207,19 +1207,19 @@ def main():
 
     #win = createWindow(args.file_names, collect=args.collect, close=False)
     # Check to see if there's a newer version of SHARPpy on Github Releases
-    latest = check_latest()
-
-    if latest[0] is False:
-        logging.info("A newer release of SHARPpy was found on Github Releases.")
-    else:
-        logging.info("This is the most recent version of SHARPpy.")
-
-    # Alert the user that there's a newer version on Github (and by extension through CI also on pip and conda)
-    if latest[0] is False:
-        newerRelease(latest)    
+    # latest = check_latest()
+    #
+    # if latest[0] is False:
+    #     logging.info("A newer release of SHARPpy was found on Github Releases.")
+    # else:
+    #     logging.info("This is the most recent version of SHARPpy.")
+    #
+    # # Alert the user that there's a newer version on Github (and by extension through CI also on pip and conda)
+    # if latest[0] is False:
+    #     newerRelease(latest)
 
     if args.dt is not None and args.ds is not None and args.stn is not None:
-        dt = date.datetime.strptime(args.dt, "%Y%m%d/%H")   
+        dt = date.datetime.strptime(args.dt, "%Y%m%d/%H")
         win = search_and_plotDB(args.ds, args.stn, dt, args.output)
         win.close()
     elif args.file_names != []:
